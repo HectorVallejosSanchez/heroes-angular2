@@ -1,28 +1,37 @@
 import { Component, OnInit } from '@angular/core';
 import { Hero } from './hero';
 import { DetailComponent } from '../detail/detail.component';
+import { HeroService } from './hero.service';
+import { Router } from '@angular/router-deprecated';
+
 @Component({
     moduleId: module.id,
     selector: 'app-hero',
     templateUrl: 'hero.component.html',
     styleUrls: ['hero.component.css'],
-    directives: [DetailComponent]
+    directives: [DetailComponent],
+    
 })
 export class HeroComponent implements OnInit {
-    constructor() { }
+    constructor( private heroService: HeroService, private router: Router) { }
     selectedHero : Hero;
-    heroes = HEROES;
+    heroes: Hero[];
     hero : Hero = {id:1, name:"hector"};
     onSelect(varhero : Hero){
         console.log(varhero);
         this.selectedHero = varhero;
     }
     ngOnInit() { 
-        console.log(this.heroes);
+        this.getHeroes();
     }
-
+    getHeroes(){
+        this.heroService.getHeroes().then(heroes => this.heroes = heroes)
+    }
+    gotoDetail(){
+        this.router.navigate(['HeroDetail', {id: this.selectedHero.id}]);
+    }
 }
-var HEROES: Hero[] = [
+/*var HEROES: Hero[] = [
         { "id": 11, "name": "Mr. Nice" },
         { "id": 12, "name": "Narco" },
         { "id": 13, "name": "Bombasto" },
@@ -33,4 +42,4 @@ var HEROES: Hero[] = [
         { "id": 18, "name": "Dr IQ" },
         { "id": 19, "name": "Magma" },
         { "id": 20, "name": "Tornado" }
-        ];
+        ];*/
